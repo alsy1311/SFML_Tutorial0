@@ -73,14 +73,12 @@ class Entity
 public:
     float x, y, dx, dy, R, angle;
     bool life;
-    int countLifes;
     
     std::string name;
     Animation anim;
 
     Entity()
     {
-        countLifes = 3;
         x = 0;
         y = 0;
         dx = 0;
@@ -164,10 +162,14 @@ public:
 class player : public Entity
 {
 public:
+    int countLifes;
     bool thrust;
+    int counter;
 
     player()
     {
+        counter = 0;
+        countLifes = 3;
         name = "player";
     }
 
@@ -284,6 +286,7 @@ int main()
                 if (a->name == "asteroid" && b->name == "bullet")
                     if (isCollide(a, b))
                     {
+                        p->counter += 1;
                         a -> life = false;
                         b -> life = false;
                    
@@ -305,6 +308,7 @@ int main()
                 if (a->name == "player" && b->name == "asteroid")
                     if (isCollide(a, b))
                     {
+                        p->counter += 1;
                      
                         b->life = false;
                         auto e = std::make_shared<Entity>();
@@ -314,6 +318,7 @@ int main()
                         p->countLifes += -1;
                         if (p -> countLifes == 0) {
                             p->life = false;
+                            app.close();
                         }
                         else {
                             p->settings(sPlayer, W / 2, H / 2, 0, 20);
@@ -351,8 +356,8 @@ int main()
 
         Font font;
         font.loadFromFile("17857.ttf");
-        Text text(static_cast<char>(p->countLifes), font);
-        text.setCharacterSize(30);
+        Text text("Lifes: " + std::to_string(p->countLifes) + "\n" + "Score: " + std::to_string(p->counter), font);
+        text.setCharacterSize(20);
         text.setStyle(sf::Text::Bold);
         
         text.setPosition(100, 750);
