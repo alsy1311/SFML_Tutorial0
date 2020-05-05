@@ -28,8 +28,6 @@ public:
 
     std::vector<IntRect> frames;
 
-
-
     Animation() {
 
         Frame = 0;
